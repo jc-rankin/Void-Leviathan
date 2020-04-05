@@ -180,6 +180,25 @@ void map::setTile(int x, int y, terrainids terr)
 	_tiles[x + y * width].terrid = terr;
 	_tiles[x + y * width].hitpoints = _GetTerrainHP(terr);
 	_tiles[x + y * width].resistance = _GetTerrainRes(terr);
+
+	switch (terr) {
+	case tFloor: tcmap->setProperties(x, y, true, true);
+		break;
+	case tWallSoft: tcmap->setProperties(x, y, false, false);
+		break;
+	case tWallHard: tcmap->setProperties(x, y, false, false);
+		break;
+	case tBarrierclosed: tcmap->setProperties(x, y, false, false);
+		break;
+	case tBarrieropened: tcmap->setProperties(x, y, true, true);
+		break;
+	case tPorterin: tcmap->setProperties(x, y, true, true);
+		break;
+	case tPorterout: tcmap->setProperties(x, y, true, true);
+		break;
+	default: break;
+	}
+
 }
 
 int map::drawMap(bool recalcLos)
@@ -204,6 +223,7 @@ int map::drawMap(bool recalcLos)
 			//wstêpny pomys³ - kazaæ silnikowi poiterowaæ po aktorach
 			//alternatywnie - waliæ iteracjê, daæ array stworów i ka¿dy kafel bêdzie mia³ indeks w tym array
 			//also czy przypi¹æ osobn¹ paletê na kafle które by³y widziane czy nie s¹ czy pozostaæ przy ciemnoszarym? decyzje, decyzje...
+			//czemu pierwsza kolumna nie rysuje siê? przeœledziæ. Potencjalni sprawcy: albo mapa rysuje pomieszczenia ju¿ w pierwszej kolumnie == nie ma kolumny "œciany", albo scroll wywraca siê na pierwszej kolumnie 
 			if (tcmap->isInFov(i + x, j + y)) {
 				TCODConsole::root->putCharEx(x + 1, y + 1, _GetMapTileChar(tiddy), palette[_GetMapTileForeId(tiddy)], palette[_GetMapTileBackId(tiddy)]);
 				_tiles[(i + x) + (j + y) * width].seen = true; //tymczasowo?
@@ -223,10 +243,12 @@ int map::drawMap(bool recalcLos)
 bool map::OpenDoor(int x, int y)
 {
 	bool ret = false;
+	std::cout << "przed otwarciem: " << getTile(x, y);
 	if (getTile(x, y) == tBarrierclosed) {
 		setTile(x, y, tBarrieropened);
 		ret = true;
 	}
+	std::cout << "po otwarciu: " << getTile(x, y);
 	return ret;
 }
 
@@ -245,7 +267,7 @@ void map::dig(int x1, int y1, int x2, int y2)
 	for (int tiley = y1; tiley <= y2; tiley++)
 		for (int tilex = x1; tilex <= x2; tilex++) {
 			setTile(tilex, tiley, tFloor);
-			tcmap->setProperties(tilex, tiley, true, true);
+			//tcmap->setProperties(tilex, tiley, true, true);
 		}
 }
 

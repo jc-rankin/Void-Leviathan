@@ -112,7 +112,6 @@ bool engine::MoveChar(compass comp)
 					}
 					else
 					{
-						mapa->setTile(vc.vx(), vc.vy(), tBarrieropened);
 						gracz->setX(vc.vx());
 						gracz->setY(vc.vy());
 					}
