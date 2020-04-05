@@ -76,9 +76,9 @@ bool engine::Update()
 	// reaguj na kliki gracza
 }
 
-void engine::Render()
+void engine::Render(bool recalclos)
 {
-	mapa->drawMap(true);
+	mapa->drawMap(recalclos);
 	
 }
 
@@ -112,6 +112,7 @@ bool engine::MoveChar(compass comp)
 					}
 					else
 					{
+						mapa->setTile(vc.vx(), vc.vy(), tBarrieropened);
 						gracz->setX(vc.vx());
 						gracz->setY(vc.vy());
 					}

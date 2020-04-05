@@ -128,9 +128,9 @@ void map::_AddDoorsToAllRooms(std::vector<roomData>& allroomdata)
 		if (tx < 0) tx = 0;
 		int ty = iteroom->y - 1;
 		if (ty < 0) ty = 0;
-		int tw = iteroom->w + 2;
+		int tw = iteroom->w + 1;
 		if ((tw + tx) > width) tw = width - tx;
-		int th = iteroom->h + 2;
+		int th = iteroom->h + 1;
 		if ((th + ty) > height) th = height - ty;
 		for (int cx = 0; cx < tw; cx++) {
 			if (getTile(tx + cx, ty) == tFloor) setTile(tx + cx, ty, tBarrierclosed); //póŸniej tutaj bêdzie zamykanko poprzez setBarrier
@@ -164,6 +164,7 @@ map::map(int width, int height) : width(width), height(height){
 	bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.6f, 1.6f);
 	BspListener listener(*this);
 	bsp.traverseInvertedLevelOrder(&listener, NULL);
+	_AddDoorsToAllRooms(listener.rdata);
 
 }
 

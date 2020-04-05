@@ -63,15 +63,15 @@ int newgame(void)
 
 int mainloop()
 {
+	bool recalclos;
 	TCODConsole::root->clear();
-	silnik.Render();
+	silnik.Render(true);
 	TCODConsole::root->flush();
 	while (!TCODConsole::isWindowClosed())
 	{
-		std::cout << "start pêtelki \n";
 		TCODConsole::root->clear();
-		silnik.Update();
-		silnik.Render();
+		recalclos = silnik.Update();
+		silnik.Render(recalclos);
 		TCODConsole::root->flush();
 	}
 	return 0;

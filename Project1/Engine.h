@@ -16,6 +16,7 @@
 //.bi ma centerx / centery obliczaj¹ce centralny punkt ekranu (?) - zobaczyæ jak to trzeba bêdzie wprowadziæ gdy przyjdzie pora
 
 enum compass;
+enum terrainids;
 class map;
 class actor;
 class TCODColor;
@@ -34,7 +35,7 @@ public:
 
 	void RozpocznijRozgrywkê(); // kiedy wszystko zosta³o ustalone generuje mapê i stawia gracza gdzie trzeba - tutaj bêd¹ podawane parametry konkretnie jaka mapa itd.
 	bool Update();
-	void Render();
+	void Render(bool recalclos);
 	
 	bool MoveChar(compass comp);
 };
