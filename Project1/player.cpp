@@ -34,6 +34,11 @@ void actor::render()
 	TCODConsole::root->putCharEx(x, y, ch, palette[fore], palette[back]);
 }
 
+void actor::render(int rx, int ry)
+{
+	TCODConsole::root->putCharEx(rx, ry, ch, palette[fore], palette[back]);
+}
+
 actor::actor()
 {
 	ch = '@';

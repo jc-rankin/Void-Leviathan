@@ -5,7 +5,7 @@
 #include "Engine.h"
 
 // Hide the console window
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 
 int newgame(void);
@@ -53,7 +53,8 @@ int main()
 int newgame(void)
 {
 	//init player properly
-	silnik.rozpocznijRozgrywkê();
+
+	silnik.RozpocznijRozgrywkê();
 	mainloop();
 	return 0;
 }
@@ -62,11 +63,15 @@ int newgame(void)
 
 int mainloop()
 {
+	TCODConsole::root->clear();
+	silnik.Render();
+	TCODConsole::root->flush();
 	while (!TCODConsole::isWindowClosed())
 	{
+		std::cout << "start pêtelki \n";
 		TCODConsole::root->clear();
-		silnik.update();
-		silnik.render();
+		silnik.Update();
+		silnik.Render();
 		TCODConsole::root->flush();
 	}
 	return 0;

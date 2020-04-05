@@ -1,9 +1,25 @@
 #pragma once
 
-#include "libtcod.hpp"
+//drobne makro porównania - zwraca wiêksz¹/mniejsz¹ z wartoœci
+#define imax(a, b) (a > b ? a : b)
+#define imin(a, b) (a < b ? a : b)
+
+//rozmiar ca³ego okna w kolumnach i rzêdach oraz rozmiar okna mapy
+#define wincols 80
+#define winrows 60 
+#define vw 40
+#define vh 53
+
+#define mapw 100
+#define maph 100
+
+//.bi ma centerx / centery obliczaj¹ce centralny punkt ekranu (?) - zobaczyæ jak to trzeba bêdzie wprowadziæ gdy przyjdzie pora
+
+enum compass;
 class map;
 class actor;
 class TCODColor;
+
 
 class engine
 {
@@ -13,13 +29,16 @@ private:
 public:
 	engine();
 	~engine();
-	TCODList<actor*> pionki; // lista aktorów coby wszystkich hurtem rendern¹æ bez spinania siê o œledzenie ka¿dego z osobna
-	//przerobiæ na deque
 	actor *gracz;
 	map *mapa;
-	
 
-	void rozpocznijRozgrywkê(); // kiedy wszystko zosta³o ustalone generuje mapê i stawia gracza gdzie trzeba - tutaj bêd¹ podawane parametry konkretnie jaka mapa itd.
-	void update();
-	void render();
+	void RozpocznijRozgrywkê(); // kiedy wszystko zosta³o ustalone generuje mapê i stawia gracza gdzie trzeba - tutaj bêd¹ podawane parametry konkretnie jaka mapa itd.
+	bool Update();
+	void Render();
+	
+	bool MoveChar(compass comp);
 };
+
+int CalcDist(int x1, int y1, int x2, int y2);
+
+
