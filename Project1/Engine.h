@@ -42,4 +42,4 @@ public:
 
 int CalcDist(int x1, int y1, int x2, int y2);
 
-
+void DrawString(const char* string, int posx, int posy, int fore, int back, bool roll = false);

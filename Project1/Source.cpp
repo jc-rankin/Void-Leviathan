@@ -21,7 +21,7 @@ int main()
 {
 	TCODConsole::credits();
 	TCODConsole::root->clear();
-	TCODConsole::root->printf(30, 25, "z = exit s = start");
+	DrawString("z = exit s = start", 30, 25, 12, 19);
 	TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	

@@ -162,12 +162,26 @@ bool engine::MoveChar(compass comp)
 }
 
 
-
 int CalcDist(int x1, int y1, int x2, int y2)
 {
 	int xdiff = std::abs(x1 - x2);
 	int ydiff = std::abs(y1 - y2);
 	int dist = (xdiff + ydiff + imax(xdiff, ydiff)) >> 1;
 	return dist;
+}
+
+void DrawString(const char * string, int posx, int posy, int fore, int back, bool roll)
+{
+	//funkcja rysuje string tam gdzie trzeba, w kolorach takich jak trzeba
+	//parametr roll bêdzie s³u¿y³ specjalnemu tekstowi pojawiaj¹cemu siê stopniowo aczkolwiek niewykluczone ¿e w takich okazjach turlanie siê tekstu bêdzie zrobione rêcznie w ramach funkcji wywo³uj¹cej
+	//tak, istnieje funkcja print, printex, printf oferowana w ramach tcod, ale przy niej ryzykujê nadpisanie fancy ramek interfejsu
+	//co nie znaczy ¿e nie bêdê z nich korzysta³ jak bêdzie okazja
+	if (!roll) {
+		int strpos = 0;
+		while ((string[strpos] != '\0') && ((posx + strpos) < (wincols - 1)) && (posy < (winrows - 1))) {
+			TCODConsole::root->putCharEx(posx + strpos, posy, string[strpos], palette[fore], palette[back]);
+			strpos++;
+		}
+	}
 }
 
