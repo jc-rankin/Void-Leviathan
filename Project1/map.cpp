@@ -209,10 +209,10 @@ int map::drawMap(bool recalcLos)
 	}
 
 	//koordynaty okienka do wyrysowania
-	int i = silnik.gracz->getX() - (vw / 2);
-	int j = silnik.gracz->getY() - (vh / 2);
-	if (i < 1) i = 1;
-	if (j < 1) j = 1;
+	int i = silnik.gracz->getX() - (vw / 2)-1;
+	int j = silnik.gracz->getY() - (vh / 2)-1;
+	if (i < 1) i = 0;
+	if (j < 1) j = 0;
 	if ((i + vw) > mapw) i = mapw - vw;
 	if ((j + vh) > maph) j = maph - vh;
 
@@ -223,7 +223,6 @@ int map::drawMap(bool recalcLos)
 			//wstêpny pomys³ - kazaæ silnikowi poiterowaæ po aktorach
 			//alternatywnie - waliæ iteracjê, daæ array stworów i ka¿dy kafel bêdzie mia³ indeks w tym array
 			//also czy przypi¹æ osobn¹ paletê na kafle które by³y widziane czy nie s¹ czy pozostaæ przy ciemnoszarym? decyzje, decyzje...
-			//czemu pierwsza kolumna nie rysuje siê? przeœledziæ. Potencjalni sprawcy: albo mapa rysuje pomieszczenia ju¿ w pierwszej kolumnie == nie ma kolumny "œciany", albo scroll wywraca siê na pierwszej kolumnie 
 			if (tcmap->isInFov(i + x, j + y)) {
 				TCODConsole::root->putCharEx(x + 1, y + 1, _GetMapTileChar(tiddy), palette[_GetMapTileForeId(tiddy)], palette[_GetMapTileBackId(tiddy)]);
 				_tiles[(i + x) + (j + y) * width].seen = true; //tymczasowo?

@@ -7,8 +7,8 @@
 //rozmiar ca³ego okna w kolumnach i rzêdach oraz rozmiar okna mapy
 #define wincols 80
 #define winrows 60 
-#define vw 40
-#define vh 53
+#define vw 50
+#define vh 50
 
 #define mapw 100
 #define maph 100
@@ -36,7 +36,7 @@ public:
 	void RozpocznijRozgrywkê(); // kiedy wszystko zosta³o ustalone generuje mapê i stawia gracza gdzie trzeba - tutaj bêd¹ podawane parametry konkretnie jaka mapa itd.
 	bool Update();
 	void Render(bool recalclos);
-	
+	void DrawUI();
 	bool MoveChar(compass comp);
 };
 

@@ -82,6 +82,45 @@ void engine::Render(bool recalclos)
 	
 }
 
+void engine::DrawUI()
+{
+	//rysowanie bajerów UI
+	//pewnie wszystko pozostanie rêcznie ¿eby nie byæ przypiêtym na sztywno do kolorystyki
+	//póŸniej jakiœ algorytm zale¿ny od rozmiaru okna w kaflach
+	int posx = 0;
+	for (int indeks = 14; indeks > 9; indeks--) {
+		for (int powtórzenie = 0; powtórzenie < (wincols / 5); powtórzenie++) {
+			TCODConsole::root->putCharEx(posx, 0, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(posx, vh + 1, ' ', palette[0], palette[indeks - (vh / (winrows / 5) + 1)]);
+			TCODConsole::root->putCharEx(posx, winrows - 1, ' ', palette[0], palette[indeks - 5]);
+
+			posx++;
+		}
+		TCODConsole::root->putCharEx(posx - 2, 0, ' ', palette[0], palette[indeks - 1]);
+		TCODConsole::root->putCharEx(posx - 2, winrows - 1, ' ', palette[0], palette[indeks - 6]);
+		TCODConsole::root->putCharEx(posx - 2, vh + 1, ' ', palette[0], palette[indeks - (vh / (winrows / 5) + 2)]);
+		TCODConsole::root->putCharEx(posx - 14, 0, ' ', palette[0], palette[indeks + 1]);
+		TCODConsole::root->putCharEx(posx - 14, winrows - 1, ' ', palette[0], palette[indeks - 4]);
+		TCODConsole::root->putCharEx(posx - 14, vh + 1, ' ', palette[0], palette[indeks - (vh / (winrows / 5))]);
+	}
+
+	int posy = 0;
+	for (int indeks = 14; indeks > 9; indeks--) {
+		for (int powtórzenie = 0; powtórzenie < (winrows / 5); powtórzenie++) {
+			TCODConsole::root->putCharEx(0, posy, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(wincols - 1, posy, ' ', palette[0], palette[indeks - 5]);
+			if ((posy > 0) && (posy < (vh + 1))) TCODConsole::root->putCharEx(vw + 1, posy, ' ', palette[0], palette[indeks - (vw / (wincols / 5) + 1)]);
+			posy++;
+		}
+		TCODConsole::root->putCharEx(0, posy - 2, ' ', palette[0], palette[indeks - 1]);
+		TCODConsole::root->putCharEx(0, posy - 10, ' ', palette[0], palette[indeks + 1]);
+		TCODConsole::root->putCharEx(wincols - 1, posy - 2, ' ', palette[0], palette[indeks - 6]);
+		TCODConsole::root->putCharEx(wincols - 1, posy - 10, ' ', palette[0], palette[indeks - 4]);
+		if (posy < (vh + 1)) TCODConsole::root->putCharEx(vw + 1, posy - 2, ' ', palette[0], palette[indeks - (vw / (wincols / 5) + 2)]);
+		if (posy < (vh + 1)) TCODConsole::root->putCharEx(vw + 1, posy - 10, ' ', palette[0], palette[indeks - (vw / (wincols / 5))]);
+	}
+}
+
 bool engine::MoveChar(compass comp)
 {
 	bool ret = false;

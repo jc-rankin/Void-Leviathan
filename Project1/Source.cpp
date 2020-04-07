@@ -65,14 +65,17 @@ int mainloop()
 {
 	bool recalclos;
 	TCODConsole::root->clear();
+	silnik.DrawUI();
 	silnik.Render(true);
-	TCODConsole::root->flush();
+	TCODConsole::root->flush(); //flush po ka¿dym ruchu jest rozwi¹zaniem tymczasowym, póŸniej bêdzie flush tylko gdy bêde musia³ rysowaæ UI od zera
 	while (!TCODConsole::isWindowClosed())
 	{
 		TCODConsole::root->clear();
 		recalclos = silnik.Update();
 		silnik.Render(recalclos);
+		silnik.DrawUI();
 		TCODConsole::root->flush();
+		std::cout << "X: " << silnik.gracz->getX() << " Y: " << silnik.gracz->getY() << std::endl;
 	}
 	return 0;
 }
