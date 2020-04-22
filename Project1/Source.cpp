@@ -21,7 +21,10 @@ int main()
 {
 	TCODConsole::credits();
 	TCODConsole::root->clear();
-	DrawString("z = exit s = start", 30, 25, 12, 19);
+	DrawBox(0, 0, 79, 59, 1); //don't mind me just testing the drawbox
+
+	DrawCenterString("z = exit s = start", 25, 12, 19);
+
 	TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	

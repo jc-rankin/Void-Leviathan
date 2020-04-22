@@ -170,11 +170,114 @@ int CalcDist(int x1, int y1, int x2, int y2)
 	return dist;
 }
 
+void DrawBox(int x, int y, int tx, int ty, int fillColor, bool halfbrite)
+{
+	//bardzo wa¿ne: ze wzglêdu na nieco prymitywne jeszcze kalkulacje pude³ka rysowane t¹ metod¹ nie mog¹ byæ mniejsze ni¿ 5 punktów
+	int firstColor = (halfbrite) ? 30 : 14;
+	int posx = x;
+	int posy = y;
+	int distancex = (tx - x + 1); //+1 gdy¿ pocz¹tkowy kafel te¿ jest rysowany
+	int distancey = (ty - y + 1);
+	int sectionx = (distancex / 5);
+	int extrax = (distancex % 5);
+	int sectiony = (distancey / 5);
+	int extray = (distancey % 5);
+	bool glitterx = (distancex > 6) ? true : false;
+	bool glittery = (distancey > 6) ? true : false;
+
+	std::cout << "dx " << distancex << "sectx " << sectionx << "exx" << extrax;
+
+	int petla = 0;
+	for (int indeks = firstColor; indeks > (firstColor - 5); indeks--) {
+		for (int rpt = 0; rpt < sectionx; rpt++) {
+			TCODConsole::root->putCharEx(posx, y, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(posx, ty, ' ', palette[0], palette[indeks - 5]);
+			posx++;
+		}
+
+		//odcinek narysowany - teraz dodatkowy punkt d³ugoœci w zale¿noœci od tego jaka jest reszta z dzielenia i który to by³ odcinek (¿eby by³o w miarê równo a nie wszystko na koniec)
+		if ((extrax == 1) && (petla == 4)) {
+			TCODConsole::root->putCharEx(posx, y, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(posx, ty, ' ', palette[0], palette[indeks - 5]);
+			posx++;
+		}
+		if ((extrax == 2) && ((petla == 2) || (petla == 4))) {
+			TCODConsole::root->putCharEx(posx, y, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(posx, ty, ' ', palette[0], palette[indeks - 5]);
+			posx++;
+		}
+		if ((extrax == 3) && ((petla == 4) || (petla == 3) || (petla == 1))) {
+			TCODConsole::root->putCharEx(posx, y, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(posx, ty, ' ', palette[0], palette[indeks - 5]);
+			posx++;
+		}
+		if ((extrax == 4) && ((petla == 4) || (petla == 3) || (petla == 2) || (petla == 1))) {
+			TCODConsole::root->putCharEx(posx, y, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(posx, ty, ' ', palette[0], palette[indeks - 5]);
+			posx++;
+		}
+		petla++;
+		// a teraz "glitter" na krawêdziach odcinka, ale tylko jeœli odcinek jest dostatecznie d³ugi
+
+		if (glitterx) {
+			TCODConsole::root->putCharEx(posx - 2, y, ' ', palette[0], palette[indeks - 1]);
+			TCODConsole::root->putCharEx(posx - (sectionx - 2), y, ' ', palette[0], palette[indeks + 1]);
+			TCODConsole::root->putCharEx(posx - 2, ty, ' ', palette[0], palette[indeks - 6]);
+			TCODConsole::root->putCharEx(posx - (sectionx - 2), ty, ' ', palette[0], palette[indeks - 4]);
+		}
+	}
+	// a teraz wszystko to samo ale w pionie hoho
+	petla = 0;
+	for (int indeks = firstColor; indeks > (firstColor - 5); indeks--) {
+		for (int rpt = 0; rpt < sectiony; rpt++) {
+			TCODConsole::root->putCharEx(x, posy, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(tx, posy, ' ', palette[0], palette[indeks - 5]);
+			posy++;
+		}
+
+		//odcinek narysowany - teraz dodatkowy punkt d³ugoœci w zale¿noœci od tego jaka jest reszta z dzielenia i który to by³ odcinek (¿eby by³o w miarê równo a nie wszystko na koniec)
+		if ((extray == 1) && (petla == 4)) {
+			TCODConsole::root->putCharEx(x, posy, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(tx, posy, ' ', palette[0], palette[indeks - 5]);
+			posy++;
+		}
+		if ((extray == 2) && ((petla == 2) || (petla == 4))) {
+			TCODConsole::root->putCharEx(x, posy, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(tx, posy, ' ', palette[0], palette[indeks - 5]);
+			posy++;
+		}
+		if ((extray == 3) && ((petla == 4) || (petla == 3) || (petla == 1))) {
+			TCODConsole::root->putCharEx(x, posy, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(tx, posy, ' ', palette[0], palette[indeks - 5]);
+			posy++;
+		}
+		if ((extray == 4) && ((petla == 4) || (petla == 3) || (petla == 2) || (petla == 1))) {
+			TCODConsole::root->putCharEx(x, posy, ' ', palette[0], palette[indeks]);
+			TCODConsole::root->putCharEx(tx, posy, ' ', palette[0], palette[indeks - 5]);
+			posy++;
+		}
+		petla++;
+		// a teraz "glitter" na krawêdziach odcinka, ale tylko jeœli odcinek jest dostatecznie d³ugi
+
+		if (glittery) {
+			TCODConsole::root->putCharEx(x, posy - 2, ' ', palette[0], palette[indeks - 1]);
+			TCODConsole::root->putCharEx(x, posy - (sectiony - 2), ' ', palette[0], palette[indeks + 1]);
+			TCODConsole::root->putCharEx(tx, posy - 2, ' ', palette[0], palette[indeks - 6]);
+			TCODConsole::root->putCharEx(tx, posy - (sectiony - 2), ' ', palette[0], palette[indeks - 4]);
+		}
+	}
+	// na koniec - wyczyszczenie wnêtrza boxa
+	for (int rx = x + 1; rx < tx; rx++) 
+		for (int ry = y + 1; ry < ty; ry++) 
+			TCODConsole::root->putCharEx(rx, ry, ' ', palette[0], palette[fillColor]);
+	TCODConsole::flush();
+}
+
 void DrawString(const char * string, int posx, int posy, int fore, int back, bool roll)
 {
 	//funkcja rysuje string tam gdzie trzeba, w kolorach takich jak trzeba
 	//parametr roll bêdzie s³u¿y³ specjalnemu tekstowi pojawiaj¹cemu siê stopniowo aczkolwiek niewykluczone ¿e w takich okazjach turlanie siê tekstu bêdzie zrobione rêcznie w ramach funkcji wywo³uj¹cej
-	//tak, istnieje funkcja print, printex, printf oferowana w ramach tcod, ale przy niej ryzykujê nadpisanie fancy ramek interfejsu
+	//tak, istniej¹ funkcje print, printex, printf oferowana w ramach tcod, ale przy nich ryzykujê nadpisanie fancy ramek interfejsu
 	//co nie znaczy ¿e nie bêdê z nich korzysta³ jak bêdzie okazja
 	if (!roll) {
 		int strpos = 0;
@@ -183,5 +286,80 @@ void DrawString(const char * string, int posx, int posy, int fore, int back, boo
 			strpos++;
 		}
 	}
+	TCODConsole::flush();
 }
 
+void DrawCenterString(const char * string, int posy, int fore, int back)
+{
+	int len = 0;
+	while (string[len] != '\0') len++;	
+	int startX = (wincols - len) / 2;
+	if (startX < 1) startX = 1; //zaczynamy od 1 poniewa¿ planujê wszêdzie mieæ ramki
+	int strpos = 0;
+	while ((string[strpos] != '\0') && (strpos + startX < (wincols - 1))) {
+		TCODConsole::root->putCharEx(startX + strpos, posy, string[strpos], palette[fore], palette[back]);
+		strpos++;
+	}
+	TCODConsole::flush();
+}
+
+char GetKey(void) //przerobiæ na tcod_key? zrobiæ inny wariant na branie vk?
+{
+	char ret;
+	TCOD_key_t key;
+	TCOD_event_t ev;
+	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
+	ret = key.c;
+	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &key, NULL, false);
+	return ret;
+}
+
+char GetChar(void)
+{
+	char ret;
+	TCOD_key_t key;
+	TCOD_event_t ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
+	while ((key.c < '!' && key.c > '}') && (key.c != '\n') && (key.c != '\b'))
+		ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
+	ret = key.c;
+	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &key, NULL, false);
+	return ret;
+}
+
+void PutChar(char c, int posx, int posy, int fore, int back)
+{
+	TCODConsole::root->putCharEx(posx, posy, c, palette[fore], palette[back]);
+	TCODConsole::flush();
+}
+
+void InputString(char * string, short size, int posx, int posy)
+{
+	short currsize = 0;
+	short currx = posx;
+	PutChar('_', currx, posy, accenttext, normback);
+	char c = GetChar();
+	while ((int)c != 13)
+	{
+		if (c == '\b') {
+			if (currsize > 0) {
+				PutChar(' ', currx, posy, normback, normback);
+				currx--;
+				currsize--;
+				PutChar('_', currx, posy, accenttext, normback);
+			}
+		}
+		else
+		{
+			if (currsize < size) {
+				PutChar(c, currx, posy, normtext, normback);
+				string[currsize] = c;
+				currsize++;
+				currx++;
+				PutChar('_', currx, posy, accenttext, normback);
+			}
+		}
+		c = GetChar();
+	}
+	PutChar(' ', currx, posy, normback, normback);
+	string[currsize] = '\0';
+}
