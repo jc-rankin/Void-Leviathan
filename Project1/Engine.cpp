@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "libtcod.hpp"
 #include "player.h"
 #include "map.h"
 #include "wektor.h"
@@ -273,7 +272,7 @@ void DrawBox(int x, int y, int tx, int ty, int fillColor, bool halfbrite)
 	TCODConsole::flush();
 }
 
-void DrawString(const char * string, int posx, int posy, int fore, int back, bool roll)
+void DrawString(std::string strig, int posx, int posy, int fore, int back, bool roll)
 {
 	//funkcja rysuje string tam gdzie trzeba, w kolorach takich jak trzeba
 	//parametr roll bêdzie s³u¿y³ specjalnemu tekstowi pojawiaj¹cemu siê stopniowo aczkolwiek niewykluczone ¿e w takich okazjach turlanie siê tekstu bêdzie zrobione rêcznie w ramach funkcji wywo³uj¹cej
@@ -281,35 +280,32 @@ void DrawString(const char * string, int posx, int posy, int fore, int back, boo
 	//co nie znaczy ¿e nie bêdê z nich korzysta³ jak bêdzie okazja
 	if (!roll) {
 		int strpos = 0;
-		while ((string[strpos] != '\0') && ((posx + strpos) < (wincols - 1)) && (posy < (winrows - 1))) {
-			TCODConsole::root->putCharEx(posx + strpos, posy, string[strpos], palette[fore], palette[back]);
+		while ((strpos < strig.length()) && ((posx + strpos) < (wincols - 1)) && (posy < (winrows - 1))) {
+			TCODConsole::root->putCharEx(posx + strpos, posy, strig[strpos], palette[fore], palette[back]);
 			strpos++;
 		}
 	}
 	TCODConsole::flush();
 }
 
-void DrawCenterString(const char * string, int posy, int fore, int back)
+void DrawCenterString(std::string strig, int posy, int fore, int back)
 {
-	int len = 0;
-	while (string[len] != '\0') len++;	
-	int startX = (wincols - len) / 2;
+	int startX = (wincols - strig.length()) / 2;
 	if (startX < 1) startX = 1; //zaczynamy od 1 poniewa¿ planujê wszêdzie mieæ ramki
 	int strpos = 0;
-	while ((string[strpos] != '\0') && (strpos + startX < (wincols - 1))) {
-		TCODConsole::root->putCharEx(startX + strpos, posy, string[strpos], palette[fore], palette[back]);
+	while ((strpos < strig.length()) && (strpos + startX < (wincols - 1))) {
+		TCODConsole::root->putCharEx(startX + strpos, posy, strig[strpos], palette[fore], palette[back]);
 		strpos++;
 	}
 	TCODConsole::flush();
 }
 
-char GetKey(void) //przerobiæ na tcod_key? zrobiæ inny wariant na branie vk?
+TCOD_key_t GetKey(void) //przerobiæ na tcod_key? zrobiæ inny wariant na branie vk?
 {
-	char ret;
 	TCOD_key_t key;
 	TCOD_event_t ev;
 	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
-	ret = key.c;
+	TCOD_key_t ret = key;
 	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &key, NULL, false);
 	return ret;
 }
@@ -362,4 +358,50 @@ void InputString(char * string, short size, int posx, int posy)
 	}
 	PutChar(' ', currx, posy, normback, normback);
 	string[currsize] = '\0';
+}
+
+int ListSelector(std::string * list,  int listsize,  int posx,  int posy,  int fore,  int back, bool interline)
+{
+	int choice = 0;
+	int mno¿nik = interline ? 2 : 1;
+	for (int rozpiska = 0; rozpiska < listsize; rozpiska++) {
+		DrawString(list[rozpiska], posx + 2, posy + (rozpiska*mno¿nik), fore, back);
+	}
+	TCODConsole::root->putCharEx(posx, posy+(choice*mno¿nik), 16, palette[fore], palette[back]);
+	TCODConsole::flush();
+	TCOD_key_t sel;
+	bool chosen = false;
+	while (!chosen) {
+		sel = GetKey();
+		switch (sel.vk) {
+		case TCODK_KP8:
+		case TCODK_UP: {
+			if (choice > 0) {
+				TCODConsole::root->putCharEx(posx, posy + (choice*mno¿nik), ' ', palette[fore], palette[back]);
+				choice--;
+				TCODConsole::root->putCharEx(posx, posy + (choice*mno¿nik), 16, palette[fore], palette[back]);
+				TCODConsole::flush();
+			}
+			break;
+		}
+		case TCODK_KP2:
+		case TCODK_DOWN: {
+			if (choice < (listsize-1)) {
+				TCODConsole::root->putCharEx(posx, posy + (choice*mno¿nik), ' ', palette[fore], palette[back]);
+				choice++;
+				TCODConsole::root->putCharEx(posx, posy + (choice*mno¿nik), 16, palette[fore], palette[back]);
+				TCODConsole::flush();
+			}
+			break;
+		}
+		case TCODK_ENTER: {
+			chosen = true;
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	return choice;
 }

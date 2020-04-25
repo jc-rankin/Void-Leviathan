@@ -3,6 +3,7 @@
 #include "player.h"
 #include "map.h"
 #include "Engine.h"
+#include <string>
 
 // Hide the console window
 //#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
@@ -14,14 +15,12 @@ TCODColor palette[32]; // na razie tutaj, póŸniej mo o o ¿e gdzie indziej, ale n
 
 engine silnik; // wzium wzium
 
-// TODO: ZRÓB PÊTELKÊ PO INTOWYM CHARZE ¯EBY ZOBACZYÆ CO SIÊ RENDERUJE A CO WYPIEPRZY KOD
-
 
 int main()
 {
 	TCODConsole::credits();
 	TCODConsole::root->clear();
-	DrawBox(0, 0, 79, 59, 1); //don't mind me just testing the drawbox
+	DrawBox(0, 0, 79, 59, 1,true); //don't mind me just testing the drawbox
 
 	DrawCenterString("z = exit s = start", 25, 12, 19);
 
