@@ -405,3 +405,45 @@ int ListSelector(std::string * list,  int listsize,  int posx,  int posy,  int f
 
 	return choice;
 }
+
+bool YesNoSelector(int posx, int posy, int fore, int back)
+{
+	DrawString("  No   Yes", posx, posy, fore, back, false);
+	int choice = 0;
+	TCODConsole::root->putCharEx(posx, posy, 16, palette[fore], palette[back]);
+	TCODConsole::flush();
+	TCOD_key_t sel;
+	bool chosen = false;
+	while (!chosen) {
+		sel = GetKey();
+		switch (sel.vk) {
+		case TCODK_KP6:
+		case TCODK_RIGHT: {
+			if (choice == 0) {
+				TCODConsole::root->putCharEx(posx, posy, ' ', palette[fore], palette[back]);
+				choice = 1;
+				TCODConsole::root->putCharEx(posx + 5, posy, 16, palette[fore], palette[back]);
+				TCODConsole::flush();
+			}
+			break;
+		}
+		case TCODK_KP4:
+		case TCODK_LEFT: {
+			if (choice == 1) {
+				TCODConsole::root->putCharEx(posx + 5, posy, ' ', palette[fore], palette[back]);
+				choice = 0;
+				TCODConsole::root->putCharEx(posx, posy, 16, palette[fore], palette[back]);
+				TCODConsole::flush();
+			}
+			break;
+		}
+		case TCODK_ENTER: {
+			chosen = true;
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	return (choice = 1 ? true : false);
+}

@@ -52,7 +52,7 @@ public:
 int CalcDist(int x1, int y1, int x2, int y2);
 
 
-//sekcja procedur umiejkowych, w razie czego mo¿ne je potem wyci¹æ i przekleiæ gdzie indziej
+//sekcja procedur pomocniczych, w razie czego mo¿ne je potem wyci¹æ i przekleiæ gdzie indziej
 void DrawBox(int x, int y, int tx, int ty, int fillColor, bool halfbrite = false);
 void DrawString(std::string strig, int posx, int posy, int fore, int back, bool roll = false);
 void DrawCenterString(std::string strig, int posy, int fore, int back);
@@ -61,3 +61,4 @@ char GetChar(void);
 void PutChar(char c, int posx, int posy, int fore, int back);
 void InputString(char* string, short size, int posx, int posy); // bardzo wa¿ne: size musi byæ 1 punkt mniejszy od rozmiaru array gdy¿ inaczej korupcja stacku
 int ListSelector(std::string * list, int listsize, int posx, int posy, int fore, int back, bool interline = false);
+bool YesNoSelector(int posx, int posy, int fore, int back);
