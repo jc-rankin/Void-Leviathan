@@ -30,7 +30,9 @@ engine::~engine()
 
 void engine::RozpocznijRozgrywkê()
 {
-	gracz = new actor(40, 20, '@', 19, 0, 6); //los bêdzie podawany póŸniej gdzie indziej zale¿nie od bota
+	gracz = new playerActor();
+	bool ret = gracz->createNewCharacter();
+	YesNoSelector(10, 10, 10, 0);
 	mapa = new map(mapw, maph); 
 	// tutaj bêdzie samo generowanie zgodnie z tym co przekazane zostanie funkcji jak tylko skoñczê pisaæ
 }
@@ -300,26 +302,20 @@ void DrawCenterString(std::string strig, int posy, int fore, int back)
 	TCODConsole::flush();
 }
 
-TCOD_key_t GetKey(void) //przerobiæ na tcod_key? zrobiæ inny wariant na branie vk?
+TCOD_key_t GetKey(void) 
 {
+	//przerobiæ na checkforevent
 	TCOD_key_t key;
+	TCOD_mouse_t mouse;
 	TCOD_event_t ev;
-	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
-	TCOD_key_t ret = key;
-	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &key, NULL, false);
-	return ret;
-}
-
-char GetChar(void)
-{
-	char ret;
-	TCOD_key_t key;
-	TCOD_event_t ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
-	while ((key.c < '!' && key.c > '}') && (key.c != '\n') && (key.c != '\b'))
-		ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, false);
-	ret = key.c;
-	ev = TCODSystem::waitForEvent(TCOD_EVENT_KEY_RELEASE, &key, NULL, false);
-	return ret;
+	bool got = false;
+	while (!got) {
+		ev = TCODSystem::checkForEvent(TCOD_EVENT_ANY, &key, &mouse);
+		if (ev == TCOD_EVENT_KEY_PRESS && key.vk != TCODK_SHIFT) {
+			got = true;
+		}
+	}
+	return key;
 }
 
 void PutChar(char c, int posx, int posy, int fore, int back)
@@ -333,10 +329,10 @@ void InputString(char * string, short size, int posx, int posy)
 	short currsize = 0;
 	short currx = posx;
 	PutChar('_', currx, posy, accenttext, normback);
-	char c = GetChar();
-	while ((int)c != 13)
+	TCOD_key_t c = GetKey();
+	while (c.vk != TCODK_ENTER)
 	{
-		if (c == '\b') {
+		if (c.vk == TCODK_BACKSPACE) {
 			if (currsize > 0) {
 				PutChar(' ', currx, posy, normback, normback);
 				currx--;
@@ -346,15 +342,16 @@ void InputString(char * string, short size, int posx, int posy)
 		}
 		else
 		{
-			if (currsize < size) {
-				PutChar(c, currx, posy, normtext, normback);
-				string[currsize] = c;
+			if ((currsize < size) && (c.vk == TCODK_CHAR)) {
+				string[currsize] = c.c;
+				if (c.shift) string[currsize] -= 32;
+				PutChar(string[currsize], currx, posy, normtext, normback);
 				currsize++;
 				currx++;
 				PutChar('_', currx, posy, accenttext, normback);
 			}
 		}
-		c = GetChar();
+		c = GetKey();
 	}
 	PutChar(' ', currx, posy, normback, normback);
 	string[currsize] = '\0';

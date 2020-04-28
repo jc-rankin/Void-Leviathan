@@ -253,9 +253,16 @@ playerActor::~playerActor()
 
 bool playerActor::createNewCharacter(void)
 {
-	DrawBox(0, 0, 79, 59, 0, true);
-	
-
+	bool chosen = false;
+	while (!chosen) {
+		DrawBox(0, 0, 79, 59, 0, true);
+		DrawCenterString("Create new pilot credentials:", 2, 15, 0);
+		DrawString("Name:", 2, 4, 13, 0);
+		_pilot_name[0] = '\0';
+		while (_pilot_name[0] == '\0') {
+			InputString(_pilot_name, 15, 8, 4);
+		}
+	}
 	return false;
 }
 

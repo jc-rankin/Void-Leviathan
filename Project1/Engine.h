@@ -2,6 +2,7 @@
 #include <string> //z wielk¹ niechêci¹ i tymczasowo a¿ znajdê jak to prawid³owo nale¿y zrobiæ
 #include "libtcod.hpp"
 
+
 //drobne makro porównania - zwraca wiêksz¹/mniejsz¹ z wartoœci
 #define imax(a, b) (a > b ? a : b)
 #define imin(a, b) (a < b ? a : b)
@@ -26,10 +27,8 @@ enum compass;
 enum terrainids;
 class map;
 class actor;
+class playerActor;
 class TCODColor;
-
-
-
 
 class engine
 {
@@ -39,7 +38,7 @@ private:
 public:
 	engine();
 	~engine();
-	actor *gracz;
+	playerActor * gracz;
 	map *mapa;
 
 	void RozpocznijRozgrywkê(); // kiedy wszystko zosta³o ustalone generuje mapê i stawia gracza gdzie trzeba - tutaj bêd¹ podawane parametry konkretnie jaka mapa itd.
@@ -57,7 +56,6 @@ void DrawBox(int x, int y, int tx, int ty, int fillColor, bool halfbrite = false
 void DrawString(std::string strig, int posx, int posy, int fore, int back, bool roll = false);
 void DrawCenterString(std::string strig, int posy, int fore, int back);
 TCOD_key_t GetKey(void);  
-char GetChar(void);
 void PutChar(char c, int posx, int posy, int fore, int back);
 void InputString(char* string, short size, int posx, int posy); // bardzo wa¿ne: size musi byæ 1 punkt mniejszy od rozmiaru array gdy¿ inaczej korupcja stacku
 int ListSelector(std::string * list, int listsize, int posx, int posy, int fore, int back, bool interline = false);
